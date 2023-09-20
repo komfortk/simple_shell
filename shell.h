@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/wait.h>
@@ -19,33 +20,21 @@
  * @environ: custom modified copy of environ from linked list env
  * @err_num: Error number or code
  * @status: Status of the command execution
+ * @readfd: fd from which to read line input
  */
 typedef struct info_s
 {
 	char **argv;
 	char *path;
-	list_t *env;
 	char **environ;
 	int err_num;
 	int status;
-} info_t;
 
-/**
- * struct list_str - singly linked list
- * @num: number field
- * @str: string
- * @next: points to the next node
- */
-typedef struct list_str
-{
-	int num;
-	char *str;
-	struct list_str *next;
-} list_t;
+	int readfd;
+} ShellInfo;
 
-int is_cmd(info_t *info, char *path);
 char *dup_chars(char *pathstr, int start, int stop);
-char *find_path(info_t *info, char *pathstr, char *cmd);
+char *find_path(ShellInfo *shell_info, char *pathstr, char *cmd);
 char *build_file_path(const char *directory, const char *command);
 char *search_in_single_directory(const char *directory, const char *command);
 char *search_in_path(const char *path, const char *command);
@@ -54,7 +43,13 @@ char *get_location(char *command);
 void execmd(char **argv);
 
 void interactive_shell(void);
+void non_interactive(const char *command_file);
 void handle_command(char *command);
+void display_prompt(const char *prompt);
+int count_tokens(const char *input, const char *delim);
+char **cp_tokens(const char *input, const char *delim, int token_num);
+char **tokenize_input(char *input);
+char *input_read();
 int main(void);
 
 #endif
