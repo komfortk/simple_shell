@@ -6,6 +6,7 @@
 #include <string.h>
 #include <stdbool.h>
 #include <unistd.h>
+#include <fcntl.h>
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <sys/stat.h>
@@ -33,6 +34,8 @@ typedef struct info_s
 	int readfd;
 } ShellInfo;
 
+extern char **environ;
+
 char *dup_chars(char *pathstr, int start, int stop);
 char *find_path(ShellInfo *shell_info, char *pathstr, char *cmd);
 char *build_file_path(const char *directory, const char *command);
@@ -51,5 +54,9 @@ char **cp_tokens(const char *input, const char *delim, int token_num);
 char **tokenize_input(char *input);
 char *input_read();
 int main(void);
+
+void exit_shell(void);
+void _prints_environment(void);
+int print_file_environment(const char *filename);
 
 #endif
