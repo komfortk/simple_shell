@@ -49,7 +49,7 @@ void non_interactive_shell(const char *command_file)
 
 	if (!file)
 	{
-		perror("Error opening command file");
+		perror("Error");
 		exit(EXIT_FAILURE);
 	}
 

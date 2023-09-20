@@ -8,7 +8,7 @@ void handle_command(char *command)
 {
 	pid_t pid;
 	size_t len;
-	/*Remove the newline character at the end of the command*/
+
 	len = strlen(command);
 	if (len > 0 && command[len - 1] == '\n')
 		command[len - 1] = '\0';
@@ -22,9 +22,9 @@ void handle_command(char *command)
 	}
 	else if (pid == 0)
 	{
-		char **argv; /*Declare argv as a pointer to a pointer to char*/
+		char **argv;
 
-		argv = malloc(2 * sizeof(char *)); /*Allocate memory for argv*/
+		argv = malloc(2 * sizeof(char *));
 		if (argv == NULL)
 		{
 			perror("malloc");
@@ -32,12 +32,12 @@ void handle_command(char *command)
 		}
 
 		argv[0] = command;
-		argv[1] = NULL; /*Null-terminate the argv array*/
+		argv[1] = NULL;
 
 		execve(command, argv, NULL);
 
 		perror("execve");
-		free(argv); /*Free the allocated memory*/
+		free(argv);
 		exit(EXIT_FAILURE);
 	}
 	else

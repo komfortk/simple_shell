@@ -6,6 +6,7 @@ char **cp_tokens(const char *input, const char *delim,
 		int token_num);
 char **tokenize_input(char *input);
 void handle_command(char *command);
+void interactive_shell(void);
 
 /**
  * main - entry point
@@ -14,33 +15,32 @@ void handle_command(char *command);
  */
 int main(void)
 {
-	char *input;
-	char **tokens;
+	ssize_t getline_re;
+	char *lineptr = NULL;
 	char *prompt = "($) ";
-	int i;
+	size_t n = 0;
 
 	while (1)
 	{
 		write(STDOUT_FILENO, prompt, strlen(prompt));
-		input = input_read();
 
-		if (input == NULL)
-			continue;
+		getline_re = getline(&lineptr, &n, stdin);
 
-		tokens = tokenize_input(input);
-
-		if (tokens == NULL)
+		if (getline_re == -1)
 		{
-			free(input);
-			continue;
+			write(STDOUT_FILENO, "\nExit shell....\n", strlen("\nExit shell....\n"));
+			break;
 		}
-		handle_command(input);
 
-		free(input);
-		for (i = 0; tokens[i] != NULL; i++)
-			free(tokens[i]);
-		free(tokens);
+		if (strcmp(lineptr, "exit\n") == 0)
+		{
+			write(STDOUT_FILENO, "Exit shell....\n", strlen("Exit shell....\n"));
+			break;
+		}
+
+		handle_command(lineptr);
 	}
 
+	free(lineptr);
 	return (0);
 }
