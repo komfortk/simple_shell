@@ -11,7 +11,7 @@
 #include <sys/wait.h>
 #include <sys/stat.h>
 
-#define BUF_SIZE 1024;
+#define BUF_SIZE 1024
 
 /**
  * struct info_s - Information about the shell command
